@@ -1,0 +1,13 @@
+#/bin/bash
+
+API_KEY=
+
+if [ -z $API_KEY ] ; then
+	echo "Please use your own api key. Read this site."
+	echo "https://developers.google.com/url-shortener/v1/getting_started"
+	exit 1
+fi
+
+curl -s https://www.googleapis.com/urlshortener/v1/url?key=$API_KEY \
+	-H 'Content-Type: application/json' \
+	-d "{'longUrl': '$1'}" | jq -r '.id' | tr -d '\n'
