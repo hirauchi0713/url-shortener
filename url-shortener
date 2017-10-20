@@ -1,13 +1,22 @@
-#/bin/bash
+#!/bin/bash
 
-API_KEY=
-
-if [ -z $API_KEY ] ; then
+if [ -z $GOOGLE_URL_SHORTENER_API_KEY ] ; then
 	echo "Please use your own api key. Read this site."
 	echo "https://developers.google.com/url-shortener/v1/getting_started"
+	echo "and set GOOGLE_URL_SHORTENER_API_KEY."
 	exit 1
 fi
 
-curl -s https://www.googleapis.com/urlshortener/v1/url?key=$API_KEY \
+if ! which -s jq  ; then
+	echo "ERROR: jq is not exists. Please install it."
+	exit 1
+fi
+
+if ! which -s curl  ; then
+	echo "ERROR: curl is not exists. Please install it."
+	exit 1
+fi
+
+curl -s https://www.googleapis.com/urlshortener/v1/url?key=$GOOGLE_URL_SHORTENER_API_KEY \
 	-H 'Content-Type: application/json' \
 	-d "{'longUrl': '$1'}" | jq -r '.id' | tr -d '\n'
